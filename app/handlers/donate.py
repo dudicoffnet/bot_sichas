@@ -17,6 +17,6 @@ async def donate(msg: Message):
     if SET.donatepay_url:
         kb.append([InlineKeyboardButton(text="DonatePay", url=SET.donatepay_url)])
     if not kb:
-        await msg.answer("Ссылки на донат не настроены. Добавь в .env DONATE_URL/BOOSTY_URL/DONATEPAY_URL.")
+        await msg.answer("Ссылки на донат не настроены. Добавь в переменные окружения DONATE_URL/BOOSTY_URL/DONATEPAY_URL.")
         return
     await msg.answer("Поддержать проект:", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb))

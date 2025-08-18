@@ -23,7 +23,6 @@ async def touch_last_seen(session: AsyncSession, tg_id: int):
         await session.commit()
 
 def is_online(user: User) -> bool:
-    # Онлайном считаем тех, кто активничал за последние 5 минут
     if not user.last_seen:
         return False
     delta = datetime.now(timezone.utc) - user.last_seen
@@ -33,7 +32,7 @@ async def get_or_create_prefs(session: AsyncSession, tg_id: int) -> SearchPref:
     res = await session.execute(select(SearchPref).where(SearchPref.tg_id == tg_id))
     prefs = res.scalar_one_or_none()
     if prefs is None:
-        prefs = SearchPref(tg_id=tg_id, age_min=None, age_max=None, city_filter=None)
+        prefs = SearchPref(tg_id=tg_id)
         session.add(prefs)
         await session.commit()
         await session.refresh(prefs)

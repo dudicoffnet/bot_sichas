@@ -5,4 +5,4 @@ class ProfileFSM(StatesGroup):
     age = State()
     city = State()
     interests = State()
-    photo = State()  # optional
+    photo = State()

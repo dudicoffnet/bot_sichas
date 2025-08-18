@@ -1,21 +1,16 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from app.db.engine import SessionLocal, get_user_by_tg, get_or_create_prefs
+from app.db.engine import SessionLocal, get_or_create_prefs, get_user_by_tg
 from app.db.models import User
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = Router()
 
 @router.message(lambda m: m.text == "⚙️ Настройки")
 @router.message(Command("settings"))
 async def settings_help(msg: Message):
-    text = ("Настройки:\n"
-            "• /toggle_ready — переключить статус «готов к общению»\n"
-            "• /set_city_filter <город|any> — фильтр по городу\n"
-            "• /set_age_filter <min> <max> — фильтр по возрасту")
-    await msg.answer(text)
+    await msg.answer("Настройки:\n• /toggle_ready — переключить статус «готов к общению»\n• /set_city_filter <город|any> — фильтр по городу\n• /set_age_filter <мин> <макс> — фильтр по возрасту")
 
 @router.message(Command("toggle_ready"))
 async def toggle_ready(msg: Message):

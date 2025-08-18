@@ -41,17 +41,17 @@ async def set_interests(msg: Message, state: FSMContext):
     await state.set_state(ProfileFSM.photo)
     await msg.answer("Хочешь добавить фото профиля? Пришли фото или напиши «пропустить».")
 
+@router.message(ProfileFSM.photo, F.text.casefold() == "пропустить")
+async def skip_photo(msg: Message, state: FSMContext):
+    await _save_profile(msg.from_user.id, state, None)
+    await state.clear()
+    await msg.answer("Анкета сохранена ✅")
+
 @router.message(ProfileFSM.photo, F.photo)
 async def set_photo(msg: Message, state: FSMContext):
     photo_list: list[PhotoSize] = msg.photo
     file_id = photo_list[-1].file_id if photo_list else None
     await _save_profile(msg.from_user.id, state, file_id)
-    await state.clear()
-    await msg.answer("Анкета сохранена ✅")
-
-@router.message(ProfileFSM.photo, F.text.casefold() == "пропустить")
-async def skip_photo(msg: Message, state: FSMContext):
-    await _save_profile(msg.from_user.id, state, None)
     await state.clear()
     await msg.answer("Анкета сохранена ✅")
 

@@ -17,15 +17,27 @@ class Settings:
 def get_settings() -> Settings:
     token = os.getenv("BOT_TOKEN", "")
     db_url = os.getenv("DATABASE_URL", "")
+
+    # Нормализация в asyncpg
+    if db_url.startswith("postgres://"):
+        db_url = "postgresql+asyncpg://" + db_url[len("postgres://"):]
+    elif db_url.startswith("postgresql://"):
+        db_url = "postgresql+asyncpg://" + db_url[len("postgresql://"):]
+
     sr = int(os.getenv("SEARCH_RADIUS_KM", "10"))
+
     admins_raw = os.getenv("ADMINS", "").strip()
-    admins = []
+    if not admins_raw:
+        admins_raw = os.getenv("ADMIN_ID", "").strip()
+
+    admins: list[int] = []
     if admins_raw:
         for part in admins_raw.split():
             try:
                 admins.append(int(part))
             except ValueError:
                 pass
+
     donate_url = os.getenv("DONATE_URL")
     boosty_url = os.getenv("BOOSTY_URL")
     donatepay_url = os.getenv("DONATEPAY_URL")

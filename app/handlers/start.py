@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.types import Message, FSInputFile
 from aiogram.filters import CommandStart, Command
 from app.keyboards.main import main_kb
@@ -11,7 +11,6 @@ router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message: Message):
-    # Update/ensure user in DB
     async with SessionLocal() as session:  # type: AsyncSession
         user = await get_user_by_tg(session, message.from_user.id)
         if not user:
@@ -22,11 +21,7 @@ async def cmd_start(message: Message):
 
     splash_path = os.path.join(os.getcwd(), "assets", "splash.png")
     if os.path.exists(splash_path):
-        await message.answer_photo(
-            FSInputFile(splash_path),
-            caption="Добро пожаловать в «Сейчас».",
-            reply_markup=main_kb()
-        )
+        await message.answer_photo(FSInputFile(splash_path), caption="Добро пожаловать в «Сейчас».", reply_markup=main_kb())
     else:
         await message.answer("Добро пожаловать в «Сейчас».", reply_markup=main_kb())
 

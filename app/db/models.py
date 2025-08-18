@@ -41,4 +41,4 @@ class SearchPref(Base):
     tg_id: Mapped[int] = mapped_column(BigInteger, index=True, unique=True)
     age_min: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     age_max: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    city_filter: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)  # None/'' -> любой
+    city_filter: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
