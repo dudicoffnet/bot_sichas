@@ -11,7 +11,12 @@ async def search_entry(m: Message):
 
 @router.message(lambda m: (m.text or '').strip() in {'📍 Отправить геолокацию','Отправить геолокацию','Геолокация'})
 async def ask_geo(m: Message):
-    await m.answer("Нажми кнопку ниже, чтобы отправить свою геопозицию.", reply_markup=geo_kb)
+    await m.answer(
+        "Чтобы отправить геопозицию: скрепка 📎 → Геопозиция → Отправить текущую.",
+        reply_markup=main_kb()
+    )
+
+    await m.answer("Нажми кнопку ниже, чтобы отправить свою геопозицию.", reply_markup=main_kb())
 
 @router.message(lambda m: m.location is not None)
 async def got_location(m: Message):
