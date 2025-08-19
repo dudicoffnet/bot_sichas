@@ -1,3 +1,4 @@
+from keyboards.main import main_kb
 from aiogram import Router
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from utils.store import get_state
@@ -16,4 +17,4 @@ async def settings_menu(m: Message):
 async def set_radius(m: Message):
     st = get_state(m.from_user.id)
     st.radius_km = int(m.text.split()[0])
-    await m.answer(f"Радиус поиска установлен: {st.radius_km} км.")
+    await m.answer(f"Радиус поиска установлен: {st.radius_km} км.", reply_markup=main_kb())

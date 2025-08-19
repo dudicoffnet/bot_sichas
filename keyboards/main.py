@@ -17,9 +17,7 @@ def main_kb():
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 # Request location keyboard
-geo_kb = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="📍 Поделиться локацией", request_location=True)],
+geo_kb = geo_kb],
         [KeyboardButton(text="⬅️ Назад в меню")]
     ],
     resize_keyboard=True
