@@ -1,1 +1,1 @@
-from .main import main_kb, geo_kb, intents_kb, visibility_kb
+from .main import main_kb, settings_kb, radius_kb, intents_kb
