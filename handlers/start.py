@@ -1,24 +1,27 @@
-from aiogram import Router, types
-from aiogram.types import FSInputFile
-from aiogram.filters import CommandStart
+from aiogram import Router
+from aiogram.types import Message, FSInputFile
+from keyboards.main import main_kb
+import os
 
 router = Router()
 
-@router.message(CommandStart())
-async def cmd_start(message: types.Message):
-    splash = FSInputFile("assets/splash.png")
-    await message.answer_photo(splash,
-        caption=(
-            "Приглашаю Вас в новый формат встреч «Здесь и сейчас» — онлайн, без договоренностей.\n"
-            "Запуск новой платформы. Далее будет приложение. Удачи!"
-        )
-    )
-    kb = [
-        [types.KeyboardButton(text="📅 Найти встречу")],
-        [types.KeyboardButton(text="📝 Заполнить анкету")],
-        [types.KeyboardButton(text="💖 Помочь проекту")],
-        [types.KeyboardButton(text="ℹ️ О проекте")],
-        [types.KeyboardButton(text="⚙️ Настройки")]
-    ]
-    keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer("Выберите действие:", reply_markup=keyboard)
+INTRO_TEXT = (
+    "Приглашаю Вас в новый формат встреч «Здесь и сейчас» — онлайн, без договоренностей.\n"
+    "Запуск новой платформы. Далее будет приложение. Удачи!"
+)
+
+@router.message(lambda m: m.text and m.text.startswith("/start"))
+async def cmd_start(m: Message):
+    splash = os.path.join("assets", "splash.png")
+    if os.path.exists(splash):
+        try:
+            await m.answer_photo(FSInputFile(splash), caption=INTRO_TEXT)
+        except Exception:
+            await m.answer(INTRO_TEXT)
+    else:
+        await m.answer(INTRO_TEXT)
+    await m.answer("Меню:", reply_markup=main_kb())
+
+@router.message(lambda m: m.text and m.text.startswith("/menu"))
+async def cmd_menu(m: Message):
+    await m.answer("Меню:", reply_markup=main_kb())
