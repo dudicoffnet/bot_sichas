@@ -1,6 +1,7 @@
-# SINGLE ENTRYPOINT for aiogram v3 — меню, анкета, настройки, донат (QR), приветствие с картинкой
+# SINGLE ENTRYPOINT for aiogram v3 — fixed Bot init for 3.7+ (parse_mode via DefaultBotProperties)
 import asyncio, logging, os
 from os import path
+
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ParseMode
 from aiogram.types import Message, FSInputFile, ReplyKeyboardMarkup, KeyboardButton
@@ -8,6 +9,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.client.default import DefaultBotProperties
 
 logging.basicConfig(level=logging.INFO)
 
@@ -170,7 +172,7 @@ def _get_token() -> str:
     raise RuntimeError("Не найден токен. Установи BOT_TOKEN/TOKEN/TELEGRAM_TOKEN или положи token.txt.")
 
 async def main():
-    bot = Bot(token=_get_token(), parse_mode=ParseMode.HTML)
+    bot = Bot(token=_get_token(), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
     try:
         await bot.delete_webhook(drop_pending_updates=True)
