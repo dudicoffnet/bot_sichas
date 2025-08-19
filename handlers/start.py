@@ -19,3 +19,8 @@ async def cmd_start(m: Message):
 @router.message(Command("menu"))
 async def cmd_menu(m: Message):
     await m.answer("Меню:", reply_markup=main_kb())
+
+
+@router.message(lambda m: (m.text or '').strip() in {'⬅️ Назад в меню','Назад','В меню'})
+async def back_to_menu(m: Message):
+    await m.answer("Меню:", reply_markup=main_kb())

@@ -10,11 +10,15 @@ def main_kb():
         resize_keyboard=True
     )
 
+
 def geo_kb():
+    # Кнопка запроса гео + кнопка возврата в меню. Без one_time_keyboard, чтобы клавиатура не пряталась.
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="📍 Отправить геолокацию", request_location=True)]],
-        resize_keyboard=True,
-        one_time_keyboard=True
+        keyboard=[
+            [KeyboardButton(text="📍 Отправить геолокацию", request_location=True)],
+            [KeyboardButton(text="⬅️ Назад в меню")]
+        ],
+        resize_keyboard=True
     )
 
 def intents_kb():
