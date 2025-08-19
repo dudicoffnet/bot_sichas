@@ -1,4 +1,3 @@
-
 from aiogram import Router
 from aiogram.types import Message
 from keyboards.main import main_kb, settings_kb, radius_kb, intents_kb

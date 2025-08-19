@@ -1,4 +1,3 @@
-
 from aiogram import Router
 from aiogram.types import Message, FSInputFile
 import os
