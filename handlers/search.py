@@ -1,7 +1,18 @@
+
+from aiogram import Router
+from aiogram.types import Message
+from keyboards.main import main_kb, geo_kb
+
+router = Router()
+
+@router.message(lambda m: (m.text or '').strip() in {"📍 Отправить геолокацию"})
+async def ask_geo(m: Message):
+    await m.answer("Нажми кнопку ниже, чтобы отправить свою геопозицию.", reply_markup=main_kb()()())
+
 import time
 from aiogram import Router
 from aiogram.types import Message
-from keyboards.main import main_kb
+from keyboards.main import main_kb, geo_kb
 from utils.store import get_state, get_profile, profiles, states
 
 router = Router()
@@ -17,13 +28,13 @@ def haversine(lat1, lon1, lat2, lon2):
 
 @router.message(lambda m: (m.text or '').strip() in {'🔍 Найти рядом','Найти рядом','Поиск рядом','Поиск поблизости'})
 async def search_entry(m: Message):
-    await m.answer("Отправь геопозицию, чтобы я показал людей поблизости.", reply_markup=main_kb()())
+    await m.answer("Отправь геопозицию, чтобы я показал людей поблизости.", reply_markup=main_kb()()())
 
 @router.message(lambda m: m.location is not None)
 async def got_location(m: Message):
     st = get_state(m.from_user.id)
     st.location = (m.location.latitude, m.location.longitude)
-    await m.answer("Геопозиция получена. Выбери, что хочешь сделать сейчас:", reply_markup=main_kb()())
+    await m.answer("Геопозиция получена. Выбери, что хочешь сделать сейчас:", reply_markup=main_kb()()())
 
 @router.message(lambda m: (m.text or '').strip() in {
     "🍷 Выпить бокал вина","💬 Поболтать","🛍️ Пошопиться","🚶 Прогуляться","🎬 Кино",
@@ -33,7 +44,7 @@ async def got_location(m: Message):
 async def choose_intent(m: Message):
     st = get_state(m.from_user.id)
     st.intent = (m.text or '').strip()
-    await m.answer("На какой срок включить видимость?", reply_markup=main_kb()())
+    await m.answer("На какой срок включить видимость?", reply_markup=main_kb()()())
 
 @router.message(lambda m: (m.text or '').strip() in {"30 минут","1 час","3 часа","24 часа"})
 async def set_visibility(m: Message):
@@ -74,7 +85,7 @@ async def show_matches(m: Message):
     await m.answer("Нашёл рядом:\n" + "\n".join([t for _, t in results[:10]]))
 
 
-from keyboards.main import main_kb
+from keyboards.main import main_kb, geo_kb
 @router.message(lambda m: (m.text or '').strip() in {'⬅️ Назад в меню','Назад','В меню'})
 async def back_from_search(m: Message):
-    await m.answer("Меню:", reply_markup=main_kb()())
+    await m.answer("Меню:", reply_markup=main_kb()()())
