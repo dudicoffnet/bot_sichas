@@ -6,7 +6,8 @@ from keyboards.main import main_kb
 
 router = Router()
 
-@router.message(CommandStart() | Command("menu"))
+@router.message(CommandStart())
+@router.message(Command("menu"))
 async def cmd_start(message: types.Message):
     splash = "assets/splash.png"
     if path.exists(splash):
