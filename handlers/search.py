@@ -1,9 +1,8 @@
-
-import time, math
+import time
 from aiogram import Router
 from aiogram.types import Message
 from keyboards.main import geo_kb, intents_kb, visibility_kb
-from utils.store import get_state, get_profile, profiles, states, log
+from utils.store import get_state, get_profile, profiles, states
 
 router = Router()
 
@@ -54,26 +53,22 @@ async def show_matches(m: Message):
     now = time.time()
     results = []
     for uid, other in states.items():
-        if uid == m.from_user.id: 
+        if uid == m.from_user.id:
             continue
         if not other.location or other.intent != st.intent:
             continue
         if not other.visible_until or other.visible_until < now:
             continue
-        # радиус
         radius = st.radius_km
         dist = haversine(me_loc[0], me_loc[1], other.location[0], other.location[1])
         if dist <= radius:
             p = profiles.get(uid)
-            results.append((dist, uid, p))
+            if p:
+                results.append((dist, f"• {p.name or 'Без имени'}, {p.age or '?'} — {p.city or ''} ({dist:.1f} км)"))
+            else:
+                results.append((dist, f"• Пользователь {uid} ({dist:.1f} км)"))
     if not results:
         await m.answer("Пока никого не нашли. Попробуй позже.")
         return
-    results.sort()
-    lines = []
-    for dist, uid, p in results[:10]:
-        if p:
-            lines.append(f"• {p.name or 'Без имени'}, {p.age or '?'} — {p.city or ''} ({dist:.1f} км)")
-        else:
-            lines.append(f"• Пользователь {uid} ({dist:.1f} км)")
-    await m.answer("Нашёл рядом:\n" + "\n".join(lines))
+    results.sort(key=lambda x: x[0])
+    await m.answer("Нашёл рядом:\n" + "\n".join([t for _, t in results[:10]]))

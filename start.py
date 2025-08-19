@@ -1,15 +1,13 @@
-
 import asyncio, logging
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 
-BOT_TOKEN = "7583232552:AAGDMqbLFbFRMxmqOTJQELm33phhdxmtyPM"  # вшит по запросу Юрия
+BOT_TOKEN = "7583232552:AAGDMqbLFbFRMxmqOTJQELm33phhdxmtyPM"
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher(storage=MemoryStorage())
 
-# routers
 from handlers import start, profile, search, donate, settings, admin
 dp.include_router(start.router)
 dp.include_router(profile.router)
