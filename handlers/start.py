@@ -23,4 +23,5 @@ async def cmd_menu(m: Message):
 
 @router.message(lambda m: (m.text or '').strip() in {'⬅️ Назад в меню','Назад','В меню'})
 async def back_to_menu(m: Message):
+    from keyboards.main import main_kb
     await m.answer("Меню:", reply_markup=main_kb())
