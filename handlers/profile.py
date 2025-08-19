@@ -1,47 +1,29 @@
+
 from aiogram import Router
 from aiogram.types import Message
-from aiogram.fsm.state import StatesGroup, State
-from aiogram.fsm.context import FSMContext
-from utils.store import get_profile, log
+from keyboards.main import main_kb
+from utils.store import get_state
 
 router = Router()
 
-class ProfileFSM(StatesGroup):
-    name = State()
-    age = State()
-    city = State()
-    interests = State()
+@router.message(lambda m: (m.text or "").strip() in {"📝 Моя анкета", "Моя анкета"})
+async def show_profile(m: Message):
+    st = get_state(m.from_user.id)
+    # Безопасно достаём поля (могут быть пустыми)
+    name = getattr(st, "name", "—")
+    age = getattr(st, "age", "—")
+    city = getattr(st, "city", "—")
+    intents = getattr(st, "intents", [])
+    radius = getattr(st, "radius_km", 5)
 
-@router.message(lambda m: (m.text or '').strip() in {'📝 Моя анкета','Моя анкета','Анкета'})
-async def profile_start(m: Message, state: FSMContext):
-    await m.answer("Как тебя зовут?")
-    await state.set_state(ProfileFSM.name)
-
-@router.message(ProfileFSM.name)
-async def profile_name(m: Message, state: FSMContext):
-    p = get_profile(m.from_user.id)
-    p.name = (m.text or '').strip()
-    await m.answer("Сколько тебе лет?")
-    await state.set_state(ProfileFSM.age)
-
-@router.message(ProfileFSM.age)
-async def profile_age(m: Message, state: FSMContext):
-    p = get_profile(m.from_user.id)
-    p.age = (m.text or '').strip()
-    await m.answer("В каком городе ты?")
-    await state.set_state(ProfileFSM.city)
-
-@router.message(ProfileFSM.city)
-async def profile_city(m: Message, state: FSMContext):
-    p = get_profile(m.from_user.id)
-    p.city = (m.text or '').strip()
-    await m.answer("Интересы (через запятую):")
-    await state.set_state(ProfileFSM.interests)
-
-@router.message(ProfileFSM.interests)
-async def profile_interests(m: Message, state: FSMContext):
-    p = get_profile(m.from_user.id)
-    p.interests = (m.text or '').strip()
-    await state.clear()
-    await m.answer(f"Анкета сохранена!\nИмя: {p.name}\nВозраст: {p.age}\nГород: {p.city}\nИнтересы: {p.interests}")
-    log(f"profile saved for {m.from_user.id}")
+    intents_str = " / ".join(intents) if intents else "не выбраны"
+    text = (
+        "Твоя анкета:\n"
+        f"• Имя: {name}\n"
+        f"• Возраст: {age}\n"
+        f"• Город: {city}\n"
+        f"• Цели: {intents_str}\n"
+        f"• Радиус поиска: {radius} км\n\n"
+        "Чтобы изменить цели — зайди в ⚙️ Настройки → 🎯 Цели встречи."
+    )
+    await m.answer(text, reply_markup=main_kb())
