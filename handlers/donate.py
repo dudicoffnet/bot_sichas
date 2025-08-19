@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.types import Message, FSInputFile
-import os
+from os import path
 
 router = Router()
 
@@ -11,11 +11,11 @@ async def donate(m: Message):
         "Можно перевести по QR ниже или по ссылке: https://pay.cloudtips.ru/\n"
         "Если QR не открылся — напиши сюда, пришлю напрямую."
     )
-    qr = os.path.join("assets", "qr.png")
-    if os.path.exists(qr):
-        try:
-            await m.answer_photo(FSInputFile(qr), caption=text)
-            return
-        except Exception:
-            pass
+    for candidate in ["assets/qr.png", "assets/donate_qr.png"]:
+        if path.exists(candidate):
+            try:
+                await m.answer_photo(FSInputFile(candidate), caption=text)
+                return
+            except Exception:
+                pass
     await m.answer(text)

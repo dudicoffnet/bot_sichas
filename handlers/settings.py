@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.types import Message
-from keyboards.main import main_kb, settings_kb, radius_kb, intents_kb
+from keyboards.main import main_kb, settings_kb, radius_kb, intents_kb, INTENT_SET
 from utils.store import get_state
 
 router = Router()
@@ -23,13 +23,6 @@ async def set_radius(m: Message):
 @router.message(lambda m: (m.text or "").strip() in {"🎯 Цели встречи"})
 async def open_intents(m: Message):
     await m.answer("Выбери 1–3 цели (можно по очереди).", reply_markup=intents_kb)
-
-INTENT_SET = {
-    "🍷 Выпить бокал вина","💬 Поболтать","☕ Кофе","🛍️ Пошопиться вместе","🚶 Прогулка","🎬 Кино",
-    "🏛️ Музей","💼 Коворкинг","🏋️ Спортзал","🏃 Пробежка","🎲 Настолки","📸 Фотопрогулка",
-    "🗣️ Языковой обмен","📚 Учёба вместе","🧳 Путешествия/планы","🐕 Выгул собаки",
-    "🎉 Вечеринка","🍽️ Поесть вместе"
-}
 
 @router.message(lambda m: (m.text or "").strip() in INTENT_SET)
 async def save_intent(m: Message):
