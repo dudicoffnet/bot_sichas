@@ -10,7 +10,7 @@ def main_kb():
             [KeyboardButton(text="💖 Помочь проекту")],
             [KeyboardButton(text="📍 Отправить геолокацию")]
         ],
-        resize_keyboard=True
+        resize_keyboard=True, is_persistent=True
     )
 
 # Отдельная клавиатура с настоящей кнопкой запроса гео
@@ -19,9 +19,9 @@ geo_kb = ReplyKeyboardMarkup(
         [KeyboardButton(text="📍 Отправить геолокацию", request_location=True)],
         [KeyboardButton(text="⬅️ Назад в меню")]
     ],
-    resize_keyboard=True
+    resize_keyboard=True, is_persistent=True
 )
 
 # Заглушки на будущее (если где-то импортируются)
-intents_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️ Назад в меню")]], resize_keyboard=True)
-visibility_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️ Назад в меню")]], resize_keyboard=True)
+intents_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️ Назад в меню")]], resize_keyboard=True, is_persistent=True)
+visibility_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️ Назад в меню")]], resize_keyboard=True, is_persistent=True)

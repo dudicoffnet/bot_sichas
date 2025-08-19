@@ -1,5 +1,5 @@
 from aiogram import Router
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
 from keyboards.main import main_kb, geo_kb
 from utils.store import get_state
 
@@ -7,6 +7,7 @@ router = Router()
 
 @router.message(lambda m: (m.text or '').strip() in {'🔍 Найти рядом','Найти рядом','Поиск рядом','Поиск поблизости'})
 async def search_entry(m: Message):
+    await m.answer("…", reply_markup=ReplyKeyboardRemove())
     await m.answer("Отправь геопозицию, чтобы я показал людей поблизости.", reply_markup=main_kb())
 
 @router.message(lambda m: (m.text or '').strip() in {'📍 Отправить геолокацию','Отправить геолокацию','Геолокация'})
