@@ -1,25 +1,24 @@
-from utils.menu_log import _dbg_menu_log
-import os
-from aiogram import Router
-from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, FSInputFile, ReplyKeyboardRemove
-from keyboards.main import main_kb
-from utils.store import log
+from aiogram import Router, types
+from aiogram.types import FSInputFile
+from aiogram.filters import CommandStart
 
 router = Router()
 
 @router.message(CommandStart())
-async def cmd_start(m: Message):
-    _dbg_menu_log("start"); splash = os.path.join("assets","splash.png")
-    if os.path.exists(splash):
-        try:
-            await m.answer_photo(FSInputFile(splash), caption="👋 Привет! Это бот «Сейчас».")
-        except Exception:
-            pass
-    await m.answer("👋 Привет! Это бот «Сейчас».", reply_markup=main_kb())
-    log(f"/start by {m.from_user.id}")
-
-@router.message(Command("menu"))
-async def cmd_menu(m: Message):
-    _dbg_menu_log("menu"); await m.answer("Меню:", reply_markup=main_kb())
-
+async def cmd_start(message: types.Message):
+    splash = FSInputFile("assets/splash.png")
+    await message.answer_photo(splash,
+        caption=(
+            "Приглашаю Вас в новый формат встреч «Здесь и сейчас» — онлайн, без договоренностей.\n"
+            "Запуск новой платформы. Далее будет приложение. Удачи!"
+        )
+    )
+    kb = [
+        [types.KeyboardButton(text="📅 Найти встречу")],
+        [types.KeyboardButton(text="📝 Заполнить анкету")],
+        [types.KeyboardButton(text="💖 Помочь проекту")],
+        [types.KeyboardButton(text="ℹ️ О проекте")],
+        [types.KeyboardButton(text="⚙️ Настройки")]
+    ]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+    await message.answer("Выберите действие:", reply_markup=keyboard)
