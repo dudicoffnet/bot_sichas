@@ -1,7 +1,7 @@
 import time
 from aiogram import Router
 from aiogram.types import Message
-from keyboards.main import geo_kb, intents_kb, visibility_kb
+from keyboards.main import geo_kb, intents_kb, visibility_kb, main_kb
 from utils.store import get_state, get_profile, profiles, states
 
 router = Router()
