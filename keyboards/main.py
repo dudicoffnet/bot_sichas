@@ -14,5 +14,22 @@ def main_kb():
 def geo_kb():
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📍 Отправить геолокацию", request_location=True)]],
-        resize_keyboard=True, one_time_keyboard=True
+        resize_keyboard=True,
+        one_time_keyboard=True
     )
+
+def intents_kb():
+    names = [
+        "🍷 Выпить бокал вина","💬 Поболтать","🛍️ Пошопиться","🚶 Прогуляться","🎬 Кино",
+        "☕ Кофе","🍽️ Поужинать","🎮 Поиграть","🎶 Концерт","⚽ Спорт",
+        "🎨 Музей","🌳 Парк","📚 Почитать","✈️ Обсудить путешествия","❓ Другое"
+    ]
+    rows = [[KeyboardButton(text=name)] for name in names]
+    return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
+
+def visibility_kb():
+    rows = [
+        [KeyboardButton(text="30 минут"), KeyboardButton(text="1 час")],
+        [KeyboardButton(text="3 часа"), KeyboardButton(text="24 часа")]
+    ]
+    return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True, one_time_keyboard=True)
