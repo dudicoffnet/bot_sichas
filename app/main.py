@@ -1,10 +1,11 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.default import DefaultBotProperties
 from aiogram.types import Message
 import logging
 import os
 
-from app.routers import start, search, admin
+from app.routers import start, search, admin, donate, settings
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
