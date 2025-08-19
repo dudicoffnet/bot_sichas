@@ -11,11 +11,11 @@ def radius_kb():
 @router.message(lambda m: (m.text or '').strip() in {'⚙️ Настройки','Настройки'})
 async def settings_menu(m: Message):
     st = get_state(m.from_user.id)
-    await m.answer(f"Текущий радиус: {st.radius_km} км. Выбери новый:", reply_markup=radius_kb())
+    await m.answer(f"Текущий радиус: {st.radius_km} км. Выбери новый:", reply_markup=radius_kb()), reply_markup=main_kb())
 
 @router.message(lambda m: (m.text or '').strip() in {'2 км','5 км','10 км','25 км'})
 async def set_radius(m: Message):
     st = get_state(m.from_user.id)
     st.radius_km = int(m.text.split()[0])
     await m.answer("...", reply_markup=ReplyKeyboardRemove())
-    await m.answer(f"Радиус поиска установлен: {st.radius_km} км.", reply_markup=main_kb())
+    await m.answer(f"Радиус поиска установлен: {st.radius_km} км.", reply_markup=main_kb()), reply_markup=main_kb())
